@@ -9,3 +9,4 @@
 .ai-kit/hooks/check-hygiene.sh
 .ai-kit/hooks/require-log.sh
 .githooks/pre-commit
+.ai-kit/hooks/_lib.sh

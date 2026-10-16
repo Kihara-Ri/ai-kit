@@ -1,26 +1,35 @@
 #!/usr/bin/env bash
-# git 门禁：对所有 AI 和人生效，与具体工具无关
-.ai-kit/hooks/check-design.sh    || exit 1   # R1 R2 R5
-.ai-kit/hooks/check-structure.sh || exit 1   # R10 R11
-.ai-kit/hooks/check-hygiene.sh   || exit 1   # R12
+# git 门禁：对所有 AI 和人生效，与具体工具无关。只检查本次暂存的文件。
+. .ai-kit/hooks/_lib.sh
+export ONLY_STAGED=1
+.ai-kit/hooks/check-design.sh --staged || exit 1   # R1 R2 R5
+.ai-kit/hooks/check-structure.sh       || exit 1   # R10 R11
+.ai-kit/hooks/check-hygiene.sh         || exit 1   # R12
 
 staged=$(git diff --cached --name-only)
 
 # R7：改了代码必须带日志
-if echo "$staged" | grep -qE '^(src|app|components)/' && ! echo "$staged" | grep -qE '^docs/log/'; then
-  echo "缺少 docs/log 日志（R7）" >&2; exit 1
-fi
+for d in $LOG_TRIGGER_DIRS; do
+  if echo "$staged" | grep -qE "^$d/" && ! echo "$staged" | grep -qE '^docs/log/'; then
+    echo "缺少 docs/log 日志（R7）" >&2; exit 1
+  fi
+done
 
 # R4：新增组件必须登记注册表
-new=$(git diff --cached --name-only --diff-filter=A | grep -E '^src/components/' || true)
-if [ -n "$new" ] && ! echo "$staged" | grep -q 'components/REGISTRY.md'; then
-  echo "新增组件必须登记 components/REGISTRY.md（R4）" >&2; exit 1
+new=$(git diff --cached --name-only --diff-filter=A | grep -E "^($(echo $COMPONENT_DIRS | tr ' ' '|'))/.*\.(tsx|jsx|vue|svelte)$" || true)
+if [ -n "$new" ] && ! echo "$staged" | grep -qxF "$REGISTRY"; then
+  echo "新增组件必须登记 $REGISTRY（R4）：" >&2; echo "$new" >&2; exit 1
 fi
 
 # R9：新增依赖必须带决策记录
-if echo "$staged" | grep -q '^package.json$' && ! echo "$staged" | grep -q 'docs/DECISIONS.md'; then
-  if git diff --cached package.json | grep -E '^\+\s+"[^"]+":\s+"[\^~0-9]' | grep -vq '"version"'; then
-    echo "package.json 依赖有变化，请在 docs/DECISIONS.md 记录原因（R9）。确属误报可用 git commit --no-verify 并在日志说明。" >&2; exit 1
+for p in $PACKAGE_JSONS; do
+  if echo "$staged" | grep -qxF "$p" && ! echo "$staged" | grep -q 'docs/DECISIONS.md'; then
+    if git diff --cached "$p" | grep -E '^\+\s+"[^"]+":\s+"[\^~0-9a-z.:/-]' | grep -vqE '"(version|name|type|private)"'; then
+      echo "$p 依赖有变化，请在 docs/DECISIONS.md 记录原因（R9）。误报可用 git commit --no-verify 并在日志说明。" >&2; exit 1
+    fi
   fi
-fi
+done
+
+# 项目自己的额外检查（如数据泄漏扫描），在 config.sh 里设置 EXTRA_PRECOMMIT
+if [ -n "${EXTRA_PRECOMMIT:-}" ]; then sh -c "$EXTRA_PRECOMMIT" || exit 1; fi
 exit 0

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+- 新增 `.ai-kit/config.sh`（源码目录、组件目录、日志触发目录、注册表路径、行数上限）与 `hooks/_lib.sh`
+- pre-commit 只检查暂存文件；新增 `.ai-kit/legacy.txt` 历史遗留白名单，便于接入已有项目
+- 新增 `EXTRA_PRECOMMIT`，可串联项目自己的提交检查
+- R4/R9 检查支持多个组件目录与多个 `package.json`
+
 ## 0.1.0
 - 初版：12 条铁律（灰度、组件复用、图形优先、日志溯源、目录结构、注释、仓库卫生）
 - 钩子：SessionStart 注入历史、PostToolUse 设计检查、Stop 要求日志

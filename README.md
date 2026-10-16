@@ -44,6 +44,15 @@ components/REGISTRY.md    组件注册表
 docs/log/ DECISIONS.md KNOWN-ISSUES.md   日志、决策、已知问题
 ```
 
+## 接入已有项目
+
+套件为"从零开始"设计，接入已有项目时：
+
+1. 编辑 `.ai-kit/config.sh`：设置源码目录（`SRC_DIRS`）、组件目录、日志触发目录、注册表路径等。
+2. 把**历史遗留文件**逐行列入 `.ai-kit/legacy.txt`（超长文件、旧样式、含字面量颜色的文件），它们不受 R1/R2/R10/R11 检查；新文件和新改动照常受检。
+3. 提交时 pre-commit **只检查暂存的文件**，不会因为存量代码阻塞所有提交。
+4. 项目已有自己的提交检查（如数据泄漏扫描）：在 `config.sh` 设置 `EXTRA_PRECOMMIT="..."` 即可接入同一道门禁。
+
 ## 三层约束
 
 | 层 | 机制 | 对谁有效 |
@@ -58,7 +67,7 @@ docs/log/ DECISIONS.md KNOWN-ISSUES.md   日志、决策、已知问题
 
 ## 已知限制
 
-- `check-structure.sh` 默认源码在 `src/`，组件在 `src/components/`，结构不同请改路径。
+- 源码与组件目录由 `.ai-kit/config.sh` 配置，默认 `src/`。
 - 颜色检查是正则扫描，可能误报 `#add` 之类的选择器；用 `ai-kit-ignore` 标注。
 - Claude Code 钩子的事件名和字段随版本演进，升级后请核对官方文档。
 - Cursor、Codex 等没有同款钩子，靠 `AGENTS.md` 与 git 门禁约束。
