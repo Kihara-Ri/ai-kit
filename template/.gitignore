@@ -1,0 +1,30 @@
+# 依赖与构建产物
+node_modules/
+dist/
+build/
+coverage/
+.next/
+.turbo/
+.cache/
+
+# 密钥与本地环境
+.env
+.env.*
+!.env.example
+*.local.json
+
+# 个人编辑器与系统文件
+.idea/
+.vscode/
+.DS_Store
+
+# AI 本地状态
+.claude/settings.local.json
+
+# 数据与杂物
+*.log
+*.sqlite
+*.db
+*.zip
+*.tar
+*.gz

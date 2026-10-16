@@ -1,0 +1,68 @@
+/* 灰度 token：全项目唯一的颜色、间距、圆角、字号来源（R2 R5）。
+   只有灰度，没有色相。要新增层次先加 token 并写 usage，不要在组件里写字面量。 */
+
+:root,
+[data-theme="light"] {
+  --paper: #fafafa;        /* 页面底色 */
+  --paper-2: #f0f0f0;      /* 抬高一层的表面：卡片、面板 */
+  --line: #e0e0e0;         /* 分隔线、卡片描边 */
+  --line-strong: #c2c2c2;  /* 控件边框、清晰轮廓 */
+  --ink-faint: #8f8f8f;    /* 仅用于图形与图标次要笔画，不得用于文字 */
+  --ink-muted: #595959;    /* 次要文字，4.5:1 */
+  --ink: #121212;          /* 主要文字与主图形；强调时反转 */
+  --ink-inverse: #fafafa;  /* 放在 ink 底色上的文字或图形 */
+}
+
+[data-theme="dark"] {
+  --paper: #121212;
+  --paper-2: #1c1c1c;
+  --line: #2e2e2e;
+  --line-strong: #4a4a4a;
+  --ink-faint: #7a7a7a;
+  --ink-muted: #a8a8a8;
+  --ink: #f2f2f2;
+  --ink-inverse: #121212;
+}
+
+/* 未显式指定主题时跟随系统 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --paper: #121212;
+    --paper-2: #1c1c1c;
+    --line: #2e2e2e;
+    --line-strong: #4a4a4a;
+    --ink-faint: #7a7a7a;
+    --ink-muted: #a8a8a8;
+    --ink: #f2f2f2;
+    --ink-inverse: #121212;
+  }
+}
+
+:root {
+  /* 间距（4px 网格） */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* 圆角 */
+  --radius-sm: 2px;
+  --radius-md: 6px;
+  --radius-full: 9999px;
+
+  /* 字体 */
+  --font-sans: system-ui, -apple-system, "PingFang SC", "Noto Sans SC", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* 字号 / 行高 */
+  --text-display: 48px;  --leading-display: 52px;
+  --text-title: 24px;    --leading-title: 32px;
+  --text-heading: 16px;  --leading-heading: 24px;
+  --text-body: 14px;     --leading-body: 20px;
+  --text-caption: 12px;  --leading-caption: 16px;
+  --text-numeral: 32px;  --leading-numeral: 36px;
+}

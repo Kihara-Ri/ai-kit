@@ -1,0 +1,11 @@
+.ai-kit/rules.md
+.ai-kit/VERSION
+.ai-kit/kit-files.txt
+.ai-kit/update.sh
+.ai-kit/hooks/session-context.sh
+.ai-kit/hooks/post-edit.sh
+.ai-kit/hooks/check-design.sh
+.ai-kit/hooks/check-structure.sh
+.ai-kit/hooks/check-hygiene.sh
+.ai-kit/hooks/require-log.sh
+.githooks/pre-commit
