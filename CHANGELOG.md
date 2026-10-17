@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1
+- `check-hygiene.sh` 支持 `HYGIENE_ALLOW`（config.sh）：随产品发布的大文件或压缩包可列为 R12 例外
+
 ## 0.2.0
 - 新增 `.ai-kit/config.sh`（源码目录、组件目录、日志触发目录、注册表路径、行数上限）与 `hooks/_lib.sh`
 - pre-commit 只检查暂存文件；新增 `.ai-kit/legacy.txt` 历史遗留白名单，便于接入已有项目

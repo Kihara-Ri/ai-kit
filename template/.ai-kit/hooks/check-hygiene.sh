@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # 仓库卫生（R12）：只检查本次暂存的新增/修改文件
+. "$(dirname "$0")/_lib.sh"
 staged=$(git diff --cached --name-only --diff-filter=AM)
+# 随产品发布的大文件/压缩包（如官方插件 ZIP）在 config.sh 里用 HYGIENE_ALLOW（扩展正则）列为例外
+[ -n "${HYGIENE_ALLOW:-}" ] && staged=$(echo "$staged" | grep -vE "$HYGIENE_ALLOW" || true)
 [ -z "$staged" ] && exit 0
 fail=0
 

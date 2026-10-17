@@ -7,3 +7,4 @@ REGISTRY="components/REGISTRY.md"     # 组件注册表路径（R4）
 MAX_LINES=200                         # 单文件行数上限（R10）
 LEGACY_FILE=".ai-kit/legacy.txt"      # 历史遗留文件白名单：每行一个路径，列入后不受 R1/R2/R10/R11 检查
 PACKAGE_JSONS="package.json"          # 依赖变更需写决策（R9）
+HYGIENE_ALLOW=""                    # 不受 R12（大文件/压缩包）检查的路径（扩展正则），如 '^plugins/.*\.zip$'
