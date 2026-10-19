@@ -64,7 +64,7 @@ while IFS= read -r f; do
   fi
 done < <(find "$src" -type f | sort)
 
-chmod +x .ai-kit/hooks/*.sh .ai-kit/update.sh .githooks/pre-commit 2>/dev/null || true
+chmod +x .ai-kit/hooks/*.sh .ai-kit/update.sh .ai-kit/ship/ship.py .githooks/pre-commit 2>/dev/null || true
 
 # 启用 git 门禁
 if git rev-parse --git-dir >/dev/null 2>&1; then

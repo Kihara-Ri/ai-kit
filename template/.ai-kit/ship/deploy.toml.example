@@ -1,0 +1,48 @@
+# deploy.toml — ship 的项目配置（入库；不要写主机名等个人信息）。
+# 个人覆盖写在 deploy.local.toml（加入 .gitignore；路径可用 [config] local 改）：
+#   [server]
+#   host = "你的ssh主机别名"
+#   [health]
+#   public_url = "https://your.domain"
+
+[config]
+local = "deploy.local.toml"
+
+[server]
+dir = "/opt/myapp"            # 服务器上的发布根目录：releases/<时间戳>/ + current 软链 + data/
+service = "myapp"             # systemd 服务名
+unit = "deploy/myapp.service" # 可选：ship deploy --init 时安装的 unit 文件
+env_default = ""              # 可选：--init 时 service.env 不存在则写入这一行
+legacy_marker = ""            # 可选：dir 下存在此文件视为旧的扁平安装，--init 时迁入 releases/legacy-*
+keep_releases = 5
+lock_ttl = 1800               # 发布锁超过此秒数只提示、不自动解锁
+settle = 2                    # 重启后等几秒再做健康检查
+
+[build]
+test = ["python3 -m unittest discover -s tests -q"]   # 发布前测试关卡；--skip-tests 跳过
+build = []                                           # 构建命令（在项目根执行）
+artifacts = []                                       # 构建后必须与已提交内容一致的路径，如 ["static"]
+package = "python3 tools/package.py"                 # 生成发布包的命令
+package_path = "dist/myapp.tar.gz"                   # 发布包路径（tar.gz，根目录含 version_file）
+version_file = "VERSION"
+
+[health]
+url = "http://127.0.0.1:8000/health"   # 在服务器上执行 curl；要求返回 JSON
+version_field = "version"              # 与发布包版本比对
+ok_field = "ok"                        # 该字段必须为 true；留空则不检查
+retries = 5
+interval = 3
+public_url = ""                        # 可选：发布后在开发机上检查公网入口（失败退出码 3，不回滚）
+public_paths = []                      # 额外检查可访问的公网路径，如 ["/sw.js"]
+
+[data]
+kind = "none"                          # none | sqlite | command
+# kind = "sqlite"：发布前停服务后复制数据库文件；回滚时若 schema 已被新版本改动，先恢复快照
+# path = "data/app.sqlite3"
+# schema_query = "SELECT data FROM meta WHERE key='schema'"
+# schema_json = true                   # schema_query 的结果是否是 JSON 编码的值
+# kind = "command"：自定义，占位符 {path} {snapshot} {dir}
+# snapshot_cmd = "pg_dump mydb > {snapshot}"
+# restore_cmd = "psql mydb < {snapshot}"
+# schema_cmd = "psql -Atc 'select max(version) from migrations'"
+keep_snapshots = 5

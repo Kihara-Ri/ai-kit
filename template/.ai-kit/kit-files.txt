@@ -10,3 +10,6 @@
 .ai-kit/hooks/require-log.sh
 .githooks/pre-commit
 .ai-kit/hooks/_lib.sh
+.ai-kit/ship/ship.py
+.ai-kit/ship/README.md
+.ai-kit/ship/deploy.toml.example

@@ -41,6 +41,7 @@ CLAUDE.md                 仅一行 @AGENTS.md
 .gitignore                R12：不提交无关配置和数据
 tokens/tokens.css         灰度 token（深浅主题、间距、圆角、字号）
 components/REGISTRY.md    组件注册表
+.ai-kit/ship/             发布工具 ship（ship.py · README · deploy.toml.example）
 docs/log/ DECISIONS.md KNOWN-ISSUES.md   日志、决策、已知问题
 ```
 
@@ -60,6 +61,12 @@ docs/log/ DECISIONS.md KNOWN-ISSUES.md   日志、决策、已知问题
 | 说明 | `AGENTS.md` + `rules.md` | 所有 AI（无强制力） |
 | 钩子 | `.claude/settings.json` | Claude Code（拦截并反馈） |
 | 门禁 | `.githooks/pre-commit` | 任何 AI 与人（提交时必须通过） |
+
+## 发布工具 ship
+
+套件还带一个与前端纪律无关的小工具：`.ai-kit/ship/ship.py`，给「一台服务器上的小项目」用的发布 / 回滚工具
+（release 目录 + 软链 + systemd，可选数据库快照，回滚时按 schema 恢复）。只用 Python 标准库，复制
+`.ai-kit/ship/deploy.toml.example` 为 `deploy.toml` 即可使用。详见 `.ai-kit/ship/README.md`。
 
 ## 临时绕过
 

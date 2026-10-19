@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+- 新增 `ship`（`.ai-kit/ship/`）：单机裸机发布工具，release 目录 + current 软链 + systemd；
+  预检、构建产物一致性检查、发布前数据库快照与快照轮换、回滚时按 schema 恢复快照、发布锁、
+  `deploy.log`、可选公网检查、`rollback` / `unlock` / `status`；配置见 `deploy.toml.example`，测试见 `tests/test_ship.py`
+
 ## 0.2.1
 - `check-hygiene.sh` 支持 `HYGIENE_ALLOW`（config.sh）：随产品发布的大文件或压缩包可列为 R12 例外
 
