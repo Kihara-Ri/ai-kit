@@ -68,8 +68,14 @@ chmod +x .ai-kit/hooks/*.sh .ai-kit/update.sh .ai-kit/ship/ship.py .githooks/pre
 
 # 启用 git 门禁
 if git rev-parse --git-dir >/dev/null 2>&1; then
-  git config core.hooksPath .githooks
-  echo "已启用 git 钩子：core.hooksPath = .githooks"
+  # 项目已有自己的钩子目录（如 tools/hooks，里面再串联 .githooks）时不覆盖，只提示
+  current_hooks="$(git config --get core.hooksPath || true)"
+  if [ -z "$current_hooks" ] || [ "$current_hooks" = ".githooks" ]; then
+    git config core.hooksPath .githooks
+    echo "已启用 git 钩子：core.hooksPath = .githooks"
+  else
+    echo "保留已有的 core.hooksPath = $current_hooks（未改成 .githooks）；请确认它会调用 .githooks/pre-commit，见 config.sh 的 EXTRA_PRECOMMIT。"
+  fi
 else
   echo "提示：当前目录还不是 git 仓库。git init 之后运行：git config core.hooksPath .githooks"
 fi

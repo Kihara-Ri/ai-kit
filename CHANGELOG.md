@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1
+- `install.sh` 不再覆盖项目已有的 `core.hooksPath`（只在未设置或已是 `.githooks` 时才设置），避免顶掉项目自己的钩子目录
+
 ## 0.3.0
 - 新增 `ship`（`.ai-kit/ship/`）：单机裸机发布工具，release 目录 + current 软链 + systemd；
   预检、构建产物一致性检查、发布前数据库快照与快照轮换、回滚时按 schema 恢复快照、发布锁、
